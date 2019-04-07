@@ -13,6 +13,7 @@ import com.fabianofelix.cursomc.domian.Cidade;
 import com.fabianofelix.cursomc.domian.Cliente;
 import com.fabianofelix.cursomc.domian.Endereco;
 import com.fabianofelix.cursomc.domian.Estado;
+import com.fabianofelix.cursomc.domian.ItemPedido;
 import com.fabianofelix.cursomc.domian.Pagamento;
 import com.fabianofelix.cursomc.domian.PagamentoComBoleto;
 import com.fabianofelix.cursomc.domian.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.fabianofelix.cursomc.repositories.CidadeRepository;
 import com.fabianofelix.cursomc.repositories.ClienteRepository;
 import com.fabianofelix.cursomc.repositories.EnderecoRepository;
 import com.fabianofelix.cursomc.repositories.EstadoRepository;
+import com.fabianofelix.cursomc.repositories.ItemPedidoRepository;
 import com.fabianofelix.cursomc.repositories.PagamentoRepository;
 import com.fabianofelix.cursomc.repositories.PedidoRepository;
 import com.fabianofelix.cursomc.repositories.ProdutoRepository;
@@ -48,6 +50,8 @@ public class CursomcApplication implements CommandLineRunner {
 	private PedidoRepository pedidoRepository;
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -113,5 +117,21 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1, ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pagto1, pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 200.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItens().addAll(Arrays.asList(ip3));
+	
+		
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
+		
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
 	}
 }
